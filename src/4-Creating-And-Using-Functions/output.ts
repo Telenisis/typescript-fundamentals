@@ -5,7 +5,7 @@ type ProductType = {
   id:number;
   name: string;
   icon?:string;
-}
+};
 export default async function updateOutput(id: string){
 const products = await getProducts();
 const output = document.querySelector(`#${id}`);
@@ -18,21 +18,21 @@ if(output && html){
 
 
 function layoutProducts(products: ProductType[]) {
-  const items = products.map((p) => {
+  const items = products.map(({ id, name, icon }) => {
     const productHtml = `
-    <span class = "card-id">#${p.id}</span>
-      <i class = "card-icon ${p.icon} "></li>
-    <span class ="card-name">${p.name}</span>
+    <span class="card-id">#${id}</span>
+      <i class="card-icon ${icon} fa-lg"></i>
+    <span class="card-name">${name}</span>
     `;
     const cardHtml = `
     <li>
-      <div class="card">
-        <div class="card-content">
-          <div class="content">
-            ${productHtml}
-          </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                ${productHtml}
+                </div>
+            </div>
         </div>
-      </div> 
     </li>
     `;
     return cardHtml;
@@ -41,7 +41,7 @@ function layoutProducts(products: ProductType[]) {
   return productsHtml;
 }
 
-async function getProducts(): Promise<ProductType[]>{
+async function getProducts(): Promise<ProductType[]> {
   const response: Response = await fetch(productsURL);
   const products: ProductType[] = await response.json();
   return products;
@@ -98,8 +98,7 @@ function runTheLearningSamples() {
   console.log(`${prefix} return array`)
   console.log(getProductNames())
 
-function getProductById(id: number): ProductType 
-| undefined{
+function getProductById(id: number): ProductType | undefined{
 return sampleProducts.find((p) => id === p.id)
   }
 
@@ -118,4 +117,61 @@ return sampleProducts.find((p) => id === p.id)
     console.log(msg);
   }
   displayProducts(sampleProducts);
+
+ const {floor, random} = Math;
+  const getRandomInt = (max: number)=> floor(random() * max);
+
+  function createProduct(name: string, icon?: string) : ProductType {
+    const id = getRandomInt(1000);
+    return {
+      id, 
+      name, 
+      icon
+    };
+  }
+console.log(`${prefix} Optinal Peramierters`);
+let pineapple = createProduct('pineapple',  'pine-apple.jpg');
+let mango = createProduct('mango');
+console.log(pineapple, mango);
+
+
+
+
+
+function createProductWithDefaults(name: string, icon: string = 'generic-fruit.jpg') : ProductType {
+  const id = getRandomInt(1000);
+  return {
+    id, 
+    name, 
+    icon
+  };
+}
+console.log(`${prefix} Default Peramierters`);
+ pineapple = createProductWithDefaults('pineapple',  'pine-apple.jpg');
+ mango = createProductWithDefaults('mango');
+ console.log(pineapple, mango)
+
+
+
+
+ function buildAddress(street: string, city:string, ...restOfAddress: string[] ){
+
+  const address = `${street} ${city} ${restOfAddress.join(' ')}`;
+  return address
+ }
+
+const someAddress = buildAddress('1 lois lane', 'smallville', 'apt 101', 'area 51', 'mystery country');
+
+ console.log(`${prefix} Rest parameters`);
+ console.log(someAddress);
+
+
+ function displayProduct({id, name}:ProductType): void{
+  console.log(`${prefix} destructuring parameters`);
+  console.log(`Product id=${id} and name=${name}`);
+ }
+  const prod = getProductById(10);
+if (prod){
+    displayProduct(prod);
+ }
 }
